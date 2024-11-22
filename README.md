@@ -70,9 +70,11 @@ Este es un sistema de suscripciones desarrollado con Laravel que incluye funcion
 - Panel administrativo con métricas y estadísticas.
 
 ## Instalación
-1. Clona el repositorio: `git clone https://github.com/usuario/dentalmas-subscription-system.git`
-2. Instala dependencias: `composer install` y `npm install`
-3. Configura el archivo `.env` y ejecuta `php artisan migrate`
+1. Clona el repositorio: `git clone https://github.com/usuario/dentalmas-subscription-system.git`.
+2. Instala dependencias: `composer install` y `npm install`.
+3. Configura el archivo `.env`.
+4. Correr comando `php artisan key:generate` y `php artisan migrate`.
+6. Luego `php artisan serve`.
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
