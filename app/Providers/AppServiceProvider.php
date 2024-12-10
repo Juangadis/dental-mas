@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\TreatmentRepositoryInterface;
+use App\Repositories\TreatmentRepository;
+use App\Services\TreatmentServiceInterface;
+use App\Services\TreatmentService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(TreatmentRepositoryInterface::class, TreatmentRepository::class);
+        $this->app->bind(TreatmentServiceInterface::class, TreatmentService::class);
     }
 
     /**
