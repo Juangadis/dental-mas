@@ -18,7 +18,7 @@ class TreatmentController extends Controller
     public function index()
     {
         $treatments = Treatment::with('category')->get();
-        return view('treatments.index', compact('treatments'));
+        return view('index', compact('treatments'));
     }
 
     public function create()
@@ -34,13 +34,13 @@ class TreatmentController extends Controller
             'description' => 'required',
             'category_id' => 'required|exists:categories,id'
         ]);
-        Treatment::create($request->all());
-        return redirect()->route('treatments.index');
+        $treatment = Treatment::create($request->all());
+        return response()->json($treatment, 201);
     }
 
     public function show(Treatment $treatment)
     {
-        return view('treatments.show', compact('treatment'));
+        return $treatment->load('category');
     }
 
     public function edit(Treatment $treatment)
@@ -57,12 +57,12 @@ class TreatmentController extends Controller
             'category_id' => 'required|exists:categories,id'
         ]);
         $treatment->update($request->all());
-        return redirect()->route('treatments.index');
+        return response()->json($treatment, 200);
     }
 
     public function destroy(Treatment $treatment)
     {
         $treatment->delete();
-        return redirect()->route('treatments.index');
+        return response()->json(null, 204);
     }
 }

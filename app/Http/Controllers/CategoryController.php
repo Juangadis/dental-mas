@@ -10,7 +10,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('categories.index', compact('categories'));
+        return view('index', compact('categories'));
     }
 
     public function create()
@@ -21,13 +21,13 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate(['name' => 'required']);
-        Category::create($request->all());
-        return redirect()->route('categories.index');
+        $category = Category::create($request->all());
+        return response()->json($category, 201);
     }
 
     public function show(Category $category)
     {
-        return view('categories.show', compact('category'));
+        return $category;
     }
 
     public function edit(Category $category)
@@ -39,12 +39,12 @@ class CategoryController extends Controller
     {
         $request->validate(['name' => 'required']);
         $category->update($request->all());
-        return redirect()->route('categories.index');
+        return response()->json($category, 200);
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('categories.index');
+        return response()->json(null, 204);
     }
 }

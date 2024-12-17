@@ -3,9 +3,14 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\CategoryController;
+use App\Models\Category;
+use App\Models\Treatment;
 
 Route::get('/', function () {
-    return view('welcome');
+    $categories = Category::all();
+    $treatments = Treatment::with('category')->get();
+    return view('index', compact('categories', 'treatments'));
 });
 
 Route::get('/dashboard', function () {
@@ -19,5 +24,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/treatments', [TreatmentController::class, 'store']);
+Route::post('/categories', [CategoryController::class, 'store']);
 
 require __DIR__.'/auth.php';
