@@ -7,11 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Models\Category;
 use App\Models\Treatment;
 
-Route::get('/', function () {
-    $categories = Category::all();
-    $treatments = Treatment::with('category')->get();
-    return view('index', compact('categories', 'treatments'));
-});
+Route::get('/', [CategoryController::class, 'show'])->name('categories.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

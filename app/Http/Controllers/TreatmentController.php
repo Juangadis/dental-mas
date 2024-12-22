@@ -18,7 +18,7 @@ class TreatmentController extends Controller
     public function index()
     {
         $treatments = Treatment::with('category')->get();
-        return view('index', compact('treatments'));
+        return view('treatments.index', compact('treatments'));
     }
 
     public function create()
