@@ -172,6 +172,7 @@
         </footer>
     </div>
 
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const categoryButtons = document.querySelectorAll('.category-item');
@@ -207,6 +208,9 @@
             mobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.toggle('hidden');
             });
+
+            // Inicializar MercadoPago
+            const mp = new MercadoPago("YOUR_PUBLIC_KEY");
         });
     </script>
 </body>
