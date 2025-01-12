@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dental Mas</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -149,7 +150,7 @@
                                             Radiografías básicas
                                         </li>
                                     </ul>
-                                    <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300 mb-2">
+                                    <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300 mb-2" data-plan="{{ $plan->id }}">
                                         Contratar Mensual
                                     </button>
                                     <button class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:bg-green-700 transition-colors duration-300">
@@ -162,22 +163,65 @@
                 </div>
             </section>
 
-            <section id="section-plans" class="bg-gradient-to-b from-blue-100 to-white py-16">
-                <form id="form-checkout">
-                    <div id="form-checkout__cardNumber" class="container"></div>
-                    <div id="form-checkout__expirationDate" class="container"></div>
-                    <div id="form-checkout__securityCode" class="container"></div>
-                    <input type="text" id="form-checkout__cardholderName" />
-                    <select id="form-checkout__issuer"></select>
-                    <select id="form-checkout__installments"></select>
-                    <select id="form-checkout__identificationType"></select>
-                    <input type="text" id="form-checkout__identificationNumber" />
-                    <input type="email" id="form-checkout__cardholderEmail" />
-                
-                    <button type="submit" id="form-checkout__submit">Pagar</button>
-                    <progress value="0" class="progress-bar">Cargando...</progress>
-                </form>
-            </section>
+            <!-- Modal -->
+            <div id="payment-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <div class="mt-3 text-center">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Formulario de Pago</h3>
+                        <div class="mt-2 px-7 py-3">
+                            <!-- Payment Form -->
+                            <form id="form-checkout" class="space-y-4">
+                                <div class="space-y-2">
+                                    <label for="form-checkout__cardNumber" class="block text-sm font-medium text-gray-700">Número de tarjeta</label>
+                                    <div id="form-checkout__cardNumber" class="container h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__expirationDate" class="block text-sm font-medium text-gray-700">Fecha de vencimiento</label>
+                                    <div id="form-checkout__expirationDate" class="container h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__securityCode" class="block text-sm font-medium text-gray-700">Código de seguridad</label>
+                                    <div id="form-checkout__securityCode" class="container h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__cardholderName" class="block text-sm font-medium text-gray-700">Nombre del titular</label>
+                                    <input type="text" id="form-checkout__cardholderName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__issuer" class="block text-sm font-medium text-gray-700">Banco emisor</label>
+                                    <select id="form-checkout__issuer" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__installments" class="block text-sm font-medium text-gray-700">Cuotas</label>
+                                    <select id="form-checkout__installments" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__identificationType" class="block text-sm font-medium text-gray-700">Tipo de documento</label>
+                                    <select id="form-checkout__identificationType" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__identificationNumber" class="block text-sm font-medium text-gray-700">Número de documento</label>
+                                    <input type="text" id="form-checkout__identificationNumber" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="form-checkout__cardholderEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" id="form-checkout__cardholderEmail" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+                                </div>
+                                <div class="flex justify-end space-x-3 mt-5">
+                                    <button type="button" id="modal-close" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                                        Cerrar
+                                    </button>
+                                    <button type="submit" id="form-checkout__submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        Pagar
+                                    </button>
+                                </div>
+                            </form>
+                            <progress value="0" class="progress-bar mt-4 w-full"></progress>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
         
         <footer class="bg-gray-800 text-white py-8">
@@ -192,43 +236,144 @@
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const categoryButtons = document.querySelectorAll('.category-item');
-            const treatmentSections = document.querySelectorAll('.tratamientos');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const mp = new MercadoPago('APP_USR-395a75b3-f8e8-4b00-9777-3cd0fcc21a99');
 
-            // Funcionalidad para las categorías
-            categoryButtons.forEach(button => {
+            // Modal functionality
+            const modal = document.getElementById('payment-modal');
+            const closeButton = document.getElementById('modal-close');
+            const contractButtons = document.querySelectorAll('button[data-plan]');
+
+            contractButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const categoryId = this.getAttribute('data-category');
-                    
-                    treatmentSections.forEach(section => {
-                        section.classList.add('hidden');
-                    });
-            
-                    const activeSection = document.querySelector(`.tratamiento-${categoryId}`);
-                    if (activeSection) {
-                        activeSection.classList.remove('hidden');
-                    }
-            
-                    categoryButtons.forEach(btn => {
-                        btn.classList.remove('bg-blue-600', 'text-white');
-                        btn.classList.add('bg-white', 'text-gray-800');
-                    });
-            
-                    this.classList.remove('bg-white', 'text-gray-800');
-                    this.classList.add('bg-blue-600', 'text-white');
+                    const planId = this.getAttribute('data-plan');
+                    // Here you can use planId to set up the payment for the specific plan
+                    modal.classList.remove('hidden');
+                    initializeCardForm();
                 });
             });
 
-            // Funcionalidad para el menú móvil
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
+            closeButton.addEventListener('click', function() {
+                modal.classList.add('hidden');
             });
 
-            // Inicializar MercadoPago
-            const mp = new MercadoPago("YOUR_PUBLIC_KEY");
+            // Close modal if clicked outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+
+            function initializeCardForm() {
+                const cardForm = mp.cardForm({
+                    amount: "100.5",
+                    iframe: true,
+                    form: {
+                        id: "form-checkout",
+                        cardNumber: {
+                            id: "form-checkout__cardNumber",
+                            placeholder: "Numero de tarjeta",
+                        },
+                        expirationDate: {
+                            id: "form-checkout__expirationDate",
+                            placeholder: "MM/YY",
+                        },
+                        securityCode: {
+                            id: "form-checkout__securityCode",
+                            placeholder: "Código de seguridad",
+                        },
+                        cardholderName: {
+                            id: "form-checkout__cardholderName",
+                            placeholder: "Titular de la tarjeta",
+                        },
+                        issuer: {
+                            id: "form-checkout__issuer",
+                            placeholder: "Banco emisor",
+                        },
+                        installments: {
+                            id: "form-checkout__installments",
+                            placeholder: "Cuotas",
+                        },        
+                        identificationType: {
+                            id: "form-checkout__identificationType",
+                            placeholder: "Tipo de documento",
+                        },
+                        identificationNumber: {
+                            id: "form-checkout__identificationNumber",
+                            placeholder: "Número del documento",
+                        },
+                        cardholderEmail: {
+                            id: "form-checkout__cardholderEmail",
+                            placeholder: "E-mail",
+                        },
+                    },
+                    callbacks: {
+                        onFormMounted: error => {
+                            if (error) return console.warn("Form Mounted handling error: ", error);
+                            console.log("Form mounted");
+                        },
+                        onSubmit: event => {
+                            event.preventDefault();
+
+                            const {
+                                paymentMethodId: payment_method_id,
+                                issuerId: issuer_id,
+                                cardholderEmail: email,
+                                amount,
+                                token,
+                                installments,
+                                identificationNumber,
+                                identificationType,
+                            } = cardForm.getCardFormData();
+
+                            fetch("/process_payment", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": csrfToken
+                                },
+                                body: JSON.stringify({
+                                    token,
+                                    issuer_id,
+                                    payment_method_id,
+                                    transaction_amount: Number(amount),
+                                    installments: Number(installments),
+                                    description: "Descripción del producto",
+                                    payer: {
+                                        email,
+                                        identification: {
+                                            type: identificationType,
+                                            number: identificationNumber,
+                                        },
+                                    },
+                                }),
+                            }).then(response => response.json())
+                            .then(result => {
+                                // Handle the payment result here
+                                console.log(result);
+                                alert("Pago procesado. Revise la consola para ver el resultado.");
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert("Error al procesar el pago. Por favor, intente nuevamente.");
+                            });
+                        },
+                        onFetching: (resource) => {
+                            console.log("Fetching resource: ", resource);
+
+                            // Animate progress bar
+                            const progressBar = document.querySelector(".progress-bar");
+                            progressBar.removeAttribute("value");
+
+                            return () => {
+                                progressBar.setAttribute("value", "0");
+                            };
+                        }
+                    },
+                });
+            }
         });
     </script>
+    
 </body>
 </html>
