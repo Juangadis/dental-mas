@@ -164,59 +164,104 @@
             </section>
 
             <!-- Modal -->
-            <div id="payment-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                    <div class="mt-3 text-center">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Formulario de Pago</h3>
-                        <div class="mt-2 px-7 py-3">
-                            <!-- Payment Form -->
-                            <form id="form-checkout" class="space-y-4">
-                                <div class="space-y-2">
-                                    <label for="form-checkout__cardNumber" class="block text-sm font-medium text-gray-700">Número de tarjeta</label>
-                                    <div id="form-checkout__cardNumber" class="container h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+            <div id="payment-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <!-- Overlay -->
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+            
+                <!-- Modal Container -->
+                <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                    <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                        <!-- Modal Content -->
+                        <div class="bg-white px-8 py-6">
+                            <form id="form-checkout" class="space-y-6">
+                                <!-- Card Holder and Card Number -->
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__cardholderName" class="block text-sm font-medium text-gray-700">
+                                            Titular de la Tarjeta
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="form-checkout__cardholderName" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                            placeholder="Titular de la tarjeta"
+                                        />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__cardNumber" class="block text-sm font-medium text-gray-700">
+                                            Número de Tarjeta
+                                        </label>
+                                        <div 
+                                            id="form-checkout__cardNumber" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                        ></div>
+                                    </div>
                                 </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__expirationDate" class="block text-sm font-medium text-gray-700">Fecha de vencimiento</label>
-                                    <div id="form-checkout__expirationDate" class="container h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+            
+                                <!-- Expiration Date and Security Code -->
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__expirationDate" class="block text-sm font-medium text-gray-700">
+                                            Fecha de Vencimiento (MM/AA)
+                                        </label>
+                                        <div 
+                                            id="form-checkout__expirationDate" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                        ></div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__securityCode" class="block text-sm font-medium text-gray-700">
+                                            Código de Seguridad
+                                        </label>
+                                        <div 
+                                            id="form-checkout__securityCode" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                        ></div>
+                                    </div>
                                 </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__securityCode" class="block text-sm font-medium text-gray-700">Código de seguridad</label>
-                                    <div id="form-checkout__securityCode" class="container h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div>
+            
+                                <!-- Document Number and Email -->
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__identificationNumber" class="block text-sm font-medium text-gray-700">
+                                            Número de Documento
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="form-checkout__identificationNumber" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                            placeholder="Número del documento"
+                                        />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__cardholderEmail" class="block text-sm font-medium text-gray-700">
+                                            Correo Electrónico
+                                        </label>
+                                        <input 
+                                            type="email" 
+                                            id="form-checkout__cardholderEmail" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                            placeholder="E-mail"
+                                        />
+                                    </div>
                                 </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__cardholderName" class="block text-sm font-medium text-gray-700">Nombre del titular</label>
-                                    <input type="text" id="form-checkout__cardholderName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
-                                </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__issuer" class="block text-sm font-medium text-gray-700">Banco emisor</label>
-                                    <select id="form-checkout__issuer" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></select>
-                                </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__installments" class="block text-sm font-medium text-gray-700">Cuotas</label>
-                                    <select id="form-checkout__installments" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></select>
-                                </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__identificationType" class="block text-sm font-medium text-gray-700">Tipo de documento</label>
-                                    <select id="form-checkout__identificationType" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></select>
-                                </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__identificationNumber" class="block text-sm font-medium text-gray-700">Número de documento</label>
-                                    <input type="text" id="form-checkout__identificationNumber" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
-                                </div>
-                                <div class="space-y-2">
-                                    <label for="form-checkout__cardholderEmail" class="block text-sm font-medium text-gray-700">Email</label>
-                                    <input type="email" id="form-checkout__cardholderEmail" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
-                                </div>
-                                <div class="flex justify-end space-x-3 mt-5">
-                                    <button type="button" id="modal-close" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                                        Cerrar
+            
+                                <!-- Submit Button -->
+                                <div>
+                                    <button 
+                                        type="submit" 
+                                        id="form-checkout__submit"
+                                        class="w-full h-12 px-4 py-2 text-white bg-orange-500 hover:bg-orange-600 rounded-md transition-colors duration-200"
+                                    >
+                                        Realizar Donación de $1,000
                                     </button>
-                                    <button type="submit" id="form-checkout__submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        Pagar
-                                    </button>
+                                    <p class="mt-2 text-sm text-gray-500 text-center">
+                                        En el resumen de su tarjeta, el cargo aparecerá como MERPAGO*PQAINMACCONCEP
+                                    </p>
                                 </div>
+            
+                                <progress value="0" class="progress-bar w-full hidden">Cargando...</progress>
                             </form>
-                            <progress value="0" class="progress-bar mt-4 w-full"></progress>
                         </div>
                     </div>
                 </div>
@@ -264,115 +309,107 @@
                 }
             });
 
-            function initializeCardForm() {
+            function initializeCardForm(){
                 const cardForm = mp.cardForm({
-                    amount: "100.5",
-                    iframe: true,
-                    form: {
-                        id: "form-checkout",
-                        cardNumber: {
-                            id: "form-checkout__cardNumber",
-                            placeholder: "Numero de tarjeta",
-                        },
-                        expirationDate: {
-                            id: "form-checkout__expirationDate",
-                            placeholder: "MM/YY",
-                        },
-                        securityCode: {
-                            id: "form-checkout__securityCode",
-                            placeholder: "Código de seguridad",
-                        },
-                        cardholderName: {
-                            id: "form-checkout__cardholderName",
-                            placeholder: "Titular de la tarjeta",
-                        },
-                        issuer: {
-                            id: "form-checkout__issuer",
-                            placeholder: "Banco emisor",
-                        },
-                        installments: {
-                            id: "form-checkout__installments",
-                            placeholder: "Cuotas",
-                        },        
-                        identificationType: {
-                            id: "form-checkout__identificationType",
-                            placeholder: "Tipo de documento",
-                        },
-                        identificationNumber: {
-                            id: "form-checkout__identificationNumber",
-                            placeholder: "Número del documento",
-                        },
-                        cardholderEmail: {
-                            id: "form-checkout__cardholderEmail",
-                            placeholder: "E-mail",
-                        },
+                amount: "100.5",
+                iframe: true,
+                form: {
+                    id: "form-checkout",
+                    cardNumber: {
+                    id: "form-checkout__cardNumber",
+                    placeholder: "Numero de tarjeta",
                     },
-                    callbacks: {
-                        onFormMounted: error => {
-                            if (error) return console.warn("Form Mounted handling error: ", error);
-                            console.log("Form mounted");
-                        },
-                        onSubmit: event => {
-                            event.preventDefault();
-
-                            const {
-                                paymentMethodId: payment_method_id,
-                                issuerId: issuer_id,
-                                cardholderEmail: email,
-                                amount,
-                                token,
-                                installments,
-                                identificationNumber,
-                                identificationType,
-                            } = cardForm.getCardFormData();
-
-                            fetch("/process_payment", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "X-CSRF-TOKEN": csrfToken
-                                },
-                                body: JSON.stringify({
-                                    token,
-                                    issuer_id,
-                                    payment_method_id,
-                                    transaction_amount: Number(amount),
-                                    installments: Number(installments),
-                                    description: "Descripción del producto",
-                                    payer: {
-                                        email,
-                                        identification: {
-                                            type: identificationType,
-                                            number: identificationNumber,
-                                        },
-                                    },
-                                }),
-                            }).then(response => response.json())
-                            .then(result => {
-                                // Handle the payment result here
-                                console.log(result);
-                                alert("Pago procesado. Revise la consola para ver el resultado.");
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert("Error al procesar el pago. Por favor, intente nuevamente.");
-                            });
-                        },
-                        onFetching: (resource) => {
-                            console.log("Fetching resource: ", resource);
-
-                            // Animate progress bar
-                            const progressBar = document.querySelector(".progress-bar");
-                            progressBar.removeAttribute("value");
-
-                            return () => {
-                                progressBar.setAttribute("value", "0");
-                            };
-                        }
+                    expirationDate: {
+                    id: "form-checkout__expirationDate",
+                    placeholder: "MM/YY",
                     },
+                    securityCode: {
+                    id: "form-checkout__securityCode",
+                    placeholder: "Código de seguridad",
+                    },
+                    cardholderName: {
+                    id: "form-checkout__cardholderName",
+                    placeholder: "Titular de la tarjeta",
+                    },
+                    issuer: {
+                    id: "form-checkout__issuer",
+                    placeholder: "Banco emisor",
+                    },
+                    installments: {
+                    id: "form-checkout__installments",
+                    placeholder: "Cuotas",
+                    },        
+                    identificationType: {
+                    id: "form-checkout__identificationType",
+                    placeholder: "Tipo de documento",
+                    },
+                    identificationNumber: {
+                    id: "form-checkout__identificationNumber",
+                    placeholder: "Número del documento",
+                    },
+                    cardholderEmail: {
+                    id: "form-checkout__cardholderEmail",
+                    placeholder: "E-mail",
+                    },
+                },
+                callbacks: {
+                    onFormMounted: error => {
+                    if (error) return console.warn("Form Mounted handling error: ", error);
+                    console.log("Form mounted");
+                    },
+                    onSubmit: event => {
+                    event.preventDefault();
+
+                    const {
+                        paymentMethodId: payment_method_id,
+                        issuerId: issuer_id,
+                        cardholderEmail: email,
+                        amount,
+                        token,
+                        installments,
+                        identificationNumber,
+                        identificationType,
+                    } = cardForm.getCardFormData();
+
+                    fetch("/process_payment", {
+                        method: "POST",
+                        headers: {
+                        "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                        token,
+                        issuer_id,
+                        payment_method_id,
+                        transaction_amount: Number(amount),
+                        installments: Number(installments),
+                        description: "Descripción del producto",
+                        payer: {
+                            email,
+                            identification: {
+                            type: identificationType,
+                            number: identificationNumber,
+                            },
+                        },
+                        }),
+                    });
+                    },
+                    onFetching: (resource) => {
+                    console.log("Fetching resource: ", resource);
+
+                    // Animate progress bar
+                    const progressBar = document.querySelector(".progress-bar");
+                    progressBar.removeAttribute("value");
+
+                    return () => {
+                        progressBar.setAttribute("value", "0");
+                    };
+                    }
+                },
                 });
             }
+
         });
+
     </script>
     
 </body>

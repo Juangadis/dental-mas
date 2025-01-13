@@ -23,15 +23,27 @@ class SuscribeController extends Controller
      */
     public function __construct()
     {
-        MercadoPagoConfig::setAccessToken(config('app.mp_secret'));
+        MercadoPagoConfig::setAccessToken(config('app.mp_access_token'));
         if (config('env') == 'local') {
             MercadoPagoConfig::setRuntimeEnviroment(MercadoPagoConfig::LOCAL);
         }
     }
 
-    private function process_payment($request, $request_options)
+    private function suscribe($request, $request_options)
     {
-        
+        $preapproval = new PreApprovalClient();
+        $request = [
+            "card_token_id"=> $request->cardToken,
+            "payer_email"=> $request->email,
+            "reason"=> "Suscripcion mensual Dental Mas",
+            "status"=> "authorized",
+            "preapproval_plan_id" => "2c938084944b0eac01945cade0660a05",
+            "currency_id" => "ARS",
+            "start_date" => date('c', strtotime('+1 day')),
+            "end_date" => date('c', strtotime('+1 year'))
+        ];
+
+        return "hello";
     }
 
 }
