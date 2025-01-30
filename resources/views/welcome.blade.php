@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dental Mas</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -149,7 +150,7 @@
                                             Radiografías básicas
                                         </li>
                                     </ul>
-                                    <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300 mb-2">
+                                    <button class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300 mb-2" data-plan="{{ $plan->id }}">
                                         Contratar Mensual
                                     </button>
                                     <button class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:bg-green-700 transition-colors duration-300">
@@ -161,6 +162,111 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Modal -->
+            <div id="payment-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <!-- Overlay -->
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+            
+                <!-- Modal Container -->
+                <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                    <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                        <!-- Modal Content -->
+                        <div class="bg-white px-8 py-6">
+                            <form id="form-checkout" class="space-y-6">
+                                <!-- Card Holder and Card Number -->
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__cardholderName" class="block text-sm font-medium text-gray-700">
+                                            Titular de la Tarjeta
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="form-checkout__cardholderName" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                            placeholder="Titular de la tarjeta"
+                                        />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__cardNumber" class="block text-sm font-medium text-gray-700">
+                                            Número de Tarjeta
+                                        </label>
+                                        <div 
+                                            id="form-checkout__cardNumber" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                        ></div>
+                                    </div>
+                                </div>
+            
+                                <!-- Expiration Date and Security Code -->
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__expirationDate" class="block text-sm font-medium text-gray-700">
+                                            Fecha de Vencimiento (MM/AA)
+                                        </label>
+                                        <div 
+                                            id="form-checkout__expirationDate" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                        ></div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__securityCode" class="block text-sm font-medium text-gray-700">
+                                            Código de Seguridad
+                                        </label>
+                                        <div 
+                                            id="form-checkout__securityCode" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                        ></div>
+                                    </div>
+                                </div>
+            
+                                <!-- Document Number and Email -->
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__identificationNumber" class="block text-sm font-medium text-gray-700">
+                                            Número de Documento
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="form-checkout__identificationNumber" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                            placeholder="Número del documento"
+                                        />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label for="form-checkout__cardholderEmail" class="block text-sm font-medium text-gray-700">
+                                            Correo Electrónico
+                                        </label>
+                                        <input 
+                                            type="email" 
+                                            id="form-checkout__cardholderEmail" 
+                                            class="mt-1 h-11 block w-full rounded-md border border-gray-300 py-2 px-3 focus:border-orange-500 focus:ring-orange-500"
+                                            placeholder="E-mail"
+                                        />
+                                    </div>
+                                </div>
+            
+                                <!-- Submit Button -->
+                                <div>
+                                    <button 
+                                        type="submit" 
+                                        id="form-checkout__submit"
+                                        class="w-full h-12 px-4 py-2 text-white bg-orange-500 hover:bg-orange-600 rounded-md transition-colors duration-200"
+                                    >
+                                        Realizar Donación de $1,000
+                                    </button>
+                                    <p class="mt-2 text-sm text-gray-500 text-center">
+                                        En el resumen de su tarjeta, el cargo aparecerá como MERPAGO*PQAINMACCONCEP
+                                    </p>
+                                </div>
+            
+                                <progress value="0" class="progress-bar w-full hidden">Cargando...</progress>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
         
         <footer class="bg-gray-800 text-white py-8">
@@ -172,42 +278,139 @@
         </footer>
     </div>
 
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const categoryButtons = document.querySelectorAll('.category-item');
-            const treatmentSections = document.querySelectorAll('.tratamientos');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const mp = new MercadoPago('APP_USR-395a75b3-f8e8-4b00-9777-3cd0fcc21a99');
 
-            // Funcionalidad para las categorías
-            categoryButtons.forEach(button => {
+            // Modal functionality
+            const modal = document.getElementById('payment-modal');
+            const closeButton = document.getElementById('modal-close');
+            const contractButtons = document.querySelectorAll('button[data-plan]');
+
+            contractButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const categoryId = this.getAttribute('data-category');
-                    
-                    treatmentSections.forEach(section => {
-                        section.classList.add('hidden');
-                    });
-            
-                    const activeSection = document.querySelector(`.tratamiento-${categoryId}`);
-                    if (activeSection) {
-                        activeSection.classList.remove('hidden');
-                    }
-            
-                    categoryButtons.forEach(btn => {
-                        btn.classList.remove('bg-blue-600', 'text-white');
-                        btn.classList.add('bg-white', 'text-gray-800');
-                    });
-            
-                    this.classList.remove('bg-white', 'text-gray-800');
-                    this.classList.add('bg-blue-600', 'text-white');
+                    const planId = this.getAttribute('data-plan');
+                    // Here you can use planId to set up the payment for the specific plan
+                    modal.classList.remove('hidden');
+                    initializeCardForm();
                 });
             });
 
-            // Funcionalidad para el menú móvil
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
+            closeButton.addEventListener('click', function() {
+                modal.classList.add('hidden');
             });
+
+            // Close modal if clicked outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+
+            function initializeCardForm(){
+                const cardForm = mp.cardForm({
+                amount: "100.5",
+                iframe: true,
+                form: {
+                    id: "form-checkout",
+                    cardNumber: {
+                    id: "form-checkout__cardNumber",
+                    placeholder: "Numero de tarjeta",
+                    },
+                    expirationDate: {
+                    id: "form-checkout__expirationDate",
+                    placeholder: "MM/YY",
+                    },
+                    securityCode: {
+                    id: "form-checkout__securityCode",
+                    placeholder: "Código de seguridad",
+                    },
+                    cardholderName: {
+                    id: "form-checkout__cardholderName",
+                    placeholder: "Titular de la tarjeta",
+                    },
+                    issuer: {
+                    id: "form-checkout__issuer",
+                    placeholder: "Banco emisor",
+                    },
+                    installments: {
+                    id: "form-checkout__installments",
+                    placeholder: "Cuotas",
+                    },        
+                    identificationType: {
+                    id: "form-checkout__identificationType",
+                    placeholder: "Tipo de documento",
+                    },
+                    identificationNumber: {
+                    id: "form-checkout__identificationNumber",
+                    placeholder: "Número del documento",
+                    },
+                    cardholderEmail: {
+                    id: "form-checkout__cardholderEmail",
+                    placeholder: "E-mail",
+                    },
+                },
+                callbacks: {
+                    onFormMounted: error => {
+                    if (error) return console.warn("Form Mounted handling error: ", error);
+                    console.log("Form mounted");
+                    },
+                    onSubmit: event => {
+                    event.preventDefault();
+
+                    const {
+                        paymentMethodId: payment_method_id,
+                        issuerId: issuer_id,
+                        cardholderEmail: email,
+                        amount,
+                        token,
+                        installments,
+                        identificationNumber,
+                        identificationType,
+                    } = cardForm.getCardFormData();
+
+                    fetch("/process_payment", {
+                        method: "POST",
+                        headers: {
+                        "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                        token,
+                        issuer_id,
+                        payment_method_id,
+                        transaction_amount: Number(amount),
+                        installments: Number(installments),
+                        description: "Descripción del producto",
+                        payer: {
+                            email,
+                            identification: {
+                            type: identificationType,
+                            number: identificationNumber,
+                            },
+                        },
+                        }),
+                    });
+                    },
+                    onFetching: (resource) => {
+                    console.log("Fetching resource: ", resource);
+
+                    // Animate progress bar
+                    const progressBar = document.querySelector(".progress-bar");
+                    progressBar.removeAttribute("value");
+
+                    return () => {
+                        progressBar.setAttribute("value", "0");
+                    };
+                    }
+                },
+                });
+            }
+
         });
+
     </script>
+    
 </body>
 </html>

@@ -27,4 +27,6 @@ Route::middleware('auth')->group(function () {
 Route::post('/treatments', [TreatmentController::class, 'store']);
 Route::post('/categories', [CategoryController::class, 'store']);
 
+Route::post('/suscribe', [SuscribeController::class, 'suscribe'])->name('suscribe');
+
 require __DIR__.'/auth.php';
